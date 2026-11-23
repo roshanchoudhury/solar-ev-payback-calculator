@@ -1,0 +1,10 @@
+# ==============================================================================
+# Solar & EV Charging Payback Calculator
+# Robots.txt Configuration - calc.intelligentwebdevelopers.com
+# ==============================================================================
+
+User-agent: *
+Allow: /
+
+# Sitemap Declaration
+Sitemap: https://calc.intelligentwebdevelopers.com/sitemap.xml
