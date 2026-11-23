@@ -66,6 +66,7 @@ The Solar & EV Charging Payback Calculator enables homeowners, commercial fleet 
 
 - **Publisher:** Intelligent Web Developers
 - **Website:** https://intelligentwebdevelopers.com/
+- **Physical Address:** 100 Congress Avenue, Suite 2000, Austin, TX 78701, United States
 - **About Us:** https://intelligentwebdevelopers.com/about-us/
 - **Contact Us:** https://intelligentwebdevelopers.com/contact-us/
 - **Privacy Policy:** https://intelligentwebdevelopers.com/privacy-policy/

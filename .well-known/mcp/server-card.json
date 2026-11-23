@@ -53,6 +53,13 @@
     "organization": "Intelligent Web Developers",
     "url": "https://intelligentwebdevelopers.com",
     "email": "support@intelligentwebdevelopers.com",
-    "support": "https://intelligentwebdevelopers.com/contact-us/"
+    "support": "https://intelligentwebdevelopers.com/contact-us/",
+    "address": {
+      "streetAddress": "100 Congress Avenue, Suite 2000",
+      "addressLocality": "Austin",
+      "addressRegion": "TX",
+      "postalCode": "78701",
+      "addressCountry": "US"
+    }
   }
 }

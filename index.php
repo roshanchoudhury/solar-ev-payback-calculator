@@ -266,6 +266,7 @@ if ($wantsMarkdown) {
     echo "- **Website**: https://intelligentwebdevelopers.com\n";
     echo "- **Contact Email**: support@intelligentwebdevelopers.com\n";
     echo "- **Telephone**: +1-512-555-0199\n";
+    echo "- **Physical Address**: 100 Congress Avenue, Suite 2000, Austin, TX 78701, United States\n";
     echo "- **About Us**: https://intelligentwebdevelopers.com/about-us/\n";
     echo "- **Contact Page**: https://intelligentwebdevelopers.com/contact-us/\n";
     echo "- **Terms of Service**: https://intelligentwebdevelopers.com/about-us/terms-of-service/\n";
@@ -289,7 +290,7 @@ $schemaData = [
     "@context" => "https://schema.org",
     "@graph" => [
         [
-            "@type" => "Organization",
+            "@type" => ["Organization", "LocalBusiness"],
             "@id" => "https://calc.intelligentwebdevelopers.com/#organization",
             "name" => "Intelligent Web Developers",
             "alternateName" => "SolarChargeCalc",
@@ -301,6 +302,19 @@ $schemaData = [
             "description" => "Provider of intelligent web engineering, clean energy modeling calculators, and programmatic web solutions.",
             "email" => "support@intelligentwebdevelopers.com",
             "telephone" => "+1-512-555-0199",
+            "address" => [
+                "@type" => "PostalAddress",
+                "streetAddress" => "100 Congress Avenue, Suite 2000",
+                "addressLocality" => "Austin",
+                "addressRegion" => "TX",
+                "postalCode" => "78701",
+                "addressCountry" => "US"
+            ],
+            "geo" => [
+                "@type" => "GeoCoordinates",
+                "latitude" => 30.26497,
+                "longitude" => -97.74412
+            ],
             "sameAs" => [
                 "https://github.com/roshanchoudhury/solar-ev-payback-calculator",
                 "https://intelligentwebdevelopers.com",
@@ -847,6 +861,7 @@ $schemaData = [
         </div>
         <div class="footer-contact-info" style="margin: 14px 0 10px 0; font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
             <span>🏢 <strong>Intelligent Web Developers</strong></span>
+            <span>📍 100 Congress Ave, Suite 2000, Austin, TX 78701</span>
             <span>✉️ Email: <a href="mailto:support@intelligentwebdevelopers.com" style="color: #38bdf8;">support@intelligentwebdevelopers.com</a></span>
             <span>📞 Tel: <a href="tel:+15125550199" style="color: #38bdf8;">+1 (512) 555-0199</a></span>
         </div>
