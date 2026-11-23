@@ -8,6 +8,7 @@
     "default_ev": "tata-nexon-ev"
   },
   "monetization": {
+    "enabled": false,
     "primary_lead_gen": {
       "slot_id": "lead-gen-solar-quotes",
       "badge": "⚡ Verified Local Installers",

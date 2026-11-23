@@ -718,6 +718,7 @@ $schemaData = [
         </section>
 
         <!-- Configurable Monetization Slots -->
+        <?php if (!empty($monetization['enabled'])): ?>
         <section class="monetization-grid">
             <!-- Slot 1: Primary Lead-Gen CTA Card -->
             <div class="cta-box" id="<?= htmlspecialchars($primaryCta['slot_id'] ?? 'lead-gen') ?>">
@@ -760,6 +761,7 @@ $schemaData = [
                 </a>
             </div>
         </section>
+        <?php endif; ?>
 
         <!-- Programmatic SEO FAQ Section -->
         <section class="faq-section">
