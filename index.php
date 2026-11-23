@@ -263,13 +263,13 @@ if ($wantsMarkdown) {
 
     echo "## Business Entity & Legal Verification\n\n";
     echo "- **Publisher**: Intelligent Web Developers\n";
-    echo "- **Website**: https://staging.intelligentwebdevelopers.com\n";
-    echo "- **Contact Email**: contact@intelligentwebdevelopers.com\n";
+    echo "- **Website**: https://intelligentwebdevelopers.com\n";
+    echo "- **Contact Email**: support@intelligentwebdevelopers.com\n";
     echo "- **Telephone**: +1-512-555-0199\n";
-    echo "- **About Us**: https://staging.intelligentwebdevelopers.com/about/\n";
-    echo "- **Contact Page**: https://staging.intelligentwebdevelopers.com/contact/\n";
-    echo "- **Terms of Service**: https://staging.intelligentwebdevelopers.com/terms/\n";
-    echo "- **Privacy Policy**: https://staging.intelligentwebdevelopers.com/privacy-policy/\n";
+    echo "- **About Us**: https://intelligentwebdevelopers.com/about-us/\n";
+    echo "- **Contact Page**: https://intelligentwebdevelopers.com/contact-us/\n";
+    echo "- **Terms of Service**: https://intelligentwebdevelopers.com/about-us/terms-of-service/\n";
+    echo "- **Privacy Policy**: https://intelligentwebdevelopers.com/privacy-policy/\n";
     exit;
 }
 
@@ -293,18 +293,18 @@ $schemaData = [
             "@id" => "https://calc.intelligentwebdevelopers.com/#organization",
             "name" => "Intelligent Web Developers",
             "alternateName" => "SolarChargeCalc",
-            "url" => "https://calc.intelligentwebdevelopers.com",
+            "url" => "https://intelligentwebdevelopers.com",
             "logo" => [
                 "@type" => "ImageObject",
                 "url" => "https://calc.intelligentwebdevelopers.com/favicon.svg"
             ],
             "description" => "Provider of intelligent web engineering, clean energy modeling calculators, and programmatic web solutions.",
-            "email" => "contact@intelligentwebdevelopers.com",
+            "email" => "support@intelligentwebdevelopers.com",
             "telephone" => "+1-512-555-0199",
             "sameAs" => [
                 "https://github.com/roshanchoudhury/solar-ev-payback-calculator",
-                "https://staging.intelligentwebdevelopers.com",
                 "https://intelligentwebdevelopers.com",
+                "https://intelligentwebdevelopers.com/about-us/",
                 "https://twitter.com/intelligentweb",
                 "https://linkedin.com/company/intelligentwebdevelopers"
             ],
@@ -312,8 +312,9 @@ $schemaData = [
                 [
                     "@type" => "ContactPoint",
                     "telephone" => "+1-512-555-0199",
-                    "contactType" => "customer service",
-                    "email" => "contact@intelligentwebdevelopers.com",
+                    "contactType" => "customer support",
+                    "email" => "support@intelligentwebdevelopers.com",
+                    "url" => "https://intelligentwebdevelopers.com/contact-us/",
                     "availableLanguage" => ["English"]
                 ]
             ]
@@ -836,17 +837,17 @@ $schemaData = [
     <footer class="site-footer">
         <div class="footer-links">
             <a href="/">Home</a>
-            <a href="https://staging.intelligentwebdevelopers.com/about/" target="_blank" rel="noopener">About Us</a>
-            <a href="https://staging.intelligentwebdevelopers.com/contact/" target="_blank" rel="noopener">Contact</a>
-            <a href="https://staging.intelligentwebdevelopers.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
-            <a href="https://staging.intelligentwebdevelopers.com/terms/" target="_blank" rel="noopener">Terms of Service</a>
+            <a href="https://intelligentwebdevelopers.com/about-us/" target="_blank" rel="noopener">About Us</a>
+            <a href="https://intelligentwebdevelopers.com/contact-us/" target="_blank" rel="noopener">Contact Us</a>
+            <a href="https://intelligentwebdevelopers.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+            <a href="https://intelligentwebdevelopers.com/about-us/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
             <a href="/sitemap.xml">XML Sitemap</a>
             <a href="/llms.txt">llms.txt</a>
             <a href="/.well-known/mcp/server-card.json">MCP Card</a>
         </div>
         <div class="footer-contact-info" style="margin: 14px 0 10px 0; font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
             <span>🏢 <strong>Intelligent Web Developers</strong></span>
-            <span>✉️ Email: <a href="mailto:contact@intelligentwebdevelopers.com" style="color: #38bdf8;">contact@intelligentwebdevelopers.com</a></span>
+            <span>✉️ Email: <a href="mailto:support@intelligentwebdevelopers.com" style="color: #38bdf8;">support@intelligentwebdevelopers.com</a></span>
             <span>📞 Tel: <a href="tel:+15125550199" style="color: #38bdf8;">+1 (512) 555-0199</a></span>
         </div>
         <p>

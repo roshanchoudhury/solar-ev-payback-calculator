@@ -61,3 +61,14 @@ The Solar & EV Charging Payback Calculator enables homeowners, commercial fleet 
 
 - **Markdown alternate:** Request with HTTP Header `Accept: text/markdown` or query `?format=markdown`.
 - **JSON API / MCP:** Inspect `/.well-known/mcp/server-card.json`.
+
+## Organization & Legal Verification
+
+- **Publisher:** Intelligent Web Developers
+- **Website:** https://intelligentwebdevelopers.com/
+- **About Us:** https://intelligentwebdevelopers.com/about-us/
+- **Contact Us:** https://intelligentwebdevelopers.com/contact-us/
+- **Privacy Policy:** https://intelligentwebdevelopers.com/privacy-policy/
+- **Terms of Service:** https://intelligentwebdevelopers.com/about-us/terms-of-service/
+- **Support Email:** support@intelligentwebdevelopers.com
+
