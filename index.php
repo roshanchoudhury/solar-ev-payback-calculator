@@ -265,7 +265,6 @@ if ($wantsMarkdown) {
     echo "- **Publisher**: Intelligent Web Developers\n";
     echo "- **Website**: https://intelligentwebdevelopers.com\n";
     echo "- **Contact Email**: support@intelligentwebdevelopers.com\n";
-    echo "- **Telephone**: +1-512-555-0199\n";
     echo "- **Physical Address**: 100 Congress Avenue, Suite 2000, Austin, TX 78701, United States\n";
     echo "- **About Us**: https://intelligentwebdevelopers.com/about-us/\n";
     echo "- **Contact Page**: https://intelligentwebdevelopers.com/contact-us/\n";
@@ -301,7 +300,6 @@ $schemaData = [
             ],
             "description" => "Provider of intelligent web engineering, clean energy modeling calculators, and programmatic web solutions.",
             "email" => "support@intelligentwebdevelopers.com",
-            "telephone" => "+1-512-555-0199",
             "address" => [
                 "@type" => "PostalAddress",
                 "streetAddress" => "100 Congress Avenue, Suite 2000",
@@ -325,7 +323,6 @@ $schemaData = [
             "contactPoint" => [
                 [
                     "@type" => "ContactPoint",
-                    "telephone" => "+1-512-555-0199",
                     "contactType" => "customer support",
                     "email" => "support@intelligentwebdevelopers.com",
                     "url" => "https://intelligentwebdevelopers.com/contact-us/",
@@ -865,7 +862,6 @@ $schemaData = [
             <span>🏢 <strong>Intelligent Web Developers</strong></span>
             <span>📍 100 Congress Ave, Suite 2000, Austin, TX 78701</span>
             <span>✉️ Email: <a href="mailto:support@intelligentwebdevelopers.com" style="color: #38bdf8;">support@intelligentwebdevelopers.com</a></span>
-            <span>📞 Tel: <a href="tel:+15125550199" style="color: #38bdf8;">+1 (512) 555-0199</a></span>
         </div>
         <p>
             © <?= htmlspecialchars((string)$currentYear) ?> SolarChargeCalc • Intelligent Web Developers. Zero-dependency programmatic SEO architecture designed for Apache shared hosting.
