@@ -1,0 +1,63 @@
+# Solar & EV Charging Payback Calculator
+
+> A zero-dependency, high-speed programmatic web tool and calculation engine that models residential solar photovoltaic (PV) generation, electric vehicle (EV) charging economics, and fuel displacement payback periods across global cities.
+
+The Solar & EV Charging Payback Calculator enables homeowners, commercial fleet managers, and autonomous agents to determine exact break-even timelines and 5-year net ROI by pairing rooftop solar panels with home EV charging.
+
+## Core Capabilities & Endpoints
+
+- [Interactive Web Calculator](https://calc.intelligentwebdevelopers.com/): Real-time client-side calculation engine with adjustable sliders for solar capacity, daily commute distance, and solar charging share.
+- [XML Sitemap](https://calc.intelligentwebdevelopers.com/sitemap.xml): Machine-readable sitemap of all 81 programmatic city and EV permutations.
+- [MCP Server Card](https://calc.intelligentwebdevelopers.com/.well-known/mcp/server-card.json): SEP-1649 Model Context Protocol server metadata and tool schemas.
+- [Robots Policy](https://calc.intelligentwebdevelopers.com/robots.txt): Crawler rules and Content-Signal policy (`search=yes, ai-train=no`).
+
+## Mathematical Formulation
+
+1. **Annual Solar PV Generation (kWh):**
+   `Annual kWh = System kW * Peak Sun Hours * 365 * 0.82`
+   *(0.82 derating factor accounts for inverter conversion, high-temperature degradation, dust soiling, and AC/DC wiring losses).*
+
+2. **Annual EV Energy Consumption (kWh):**
+   `Annual kWh = (Daily Commute * 365 * (EV Efficiency Wh/km / 1000)) / 0.88`
+   *(0.88 charging efficiency accounts for Level-2 AC onboard charger rectification and battery thermal losses).*
+
+3. **EV Home Charging Annual Cost:**
+   `EV Cost = (Annual EV kWh * (1 - Solar Charge Share)) * Grid Tariff + (Annual EV kWh * Solar Charge Share * 0)`
+
+4. **Internal Combustion Engine (ICE) Petrol Cost:**
+   `ICE Cost = (Annual Distance / 100 * ICE Efficiency L/100km) * Fuel Price per Liter`
+
+5. **Annual Net Savings:**
+   `Annual Savings = (ICE Fuel Cost - EV Charging Cost) + Base Home Solar Offset Savings`
+
+6. **Simple Payback Period (Years):**
+   `Payback Years = Net Solar Investment / Annual Net Savings`
+
+## Supported Cities (Dataset Parameters)
+
+- **Austin, TX (USA):** 5.1 Peak Sun Hours | $0.14/kWh Grid Tariff | $2.80/W Solar Cost | 30% Federal ITC Rebate | $3.40/gal Petrol | 8.5 L/100km ICE
+- **Phoenix, AZ (USA):** 6.2 Peak Sun Hours | $0.15/kWh Grid Tariff | $2.70/W Solar Cost | 30% Federal ITC Rebate | $3.60/gal Petrol | 8.5 L/100km ICE
+- **Sydney, NSW (Australia):** 4.8 Peak Sun Hours | A$0.32/kWh Grid Tariff | A$1.40/W Solar Cost | 28% Federal STC Rebate | A$1.95/L Petrol | 8.2 L/100km ICE
+- **Melbourne, VIC (Australia):** 4.0 Peak Sun Hours | A$0.29/kWh Grid Tariff | A$1.50/W Solar Cost | 25% State+STC Rebate | A$1.98/L Petrol | 8.2 L/100km ICE
+- **Bengaluru, KA (India):** 5.2 Peak Sun Hours | ₹7.50/kWh Grid Tariff | ₹52,000/kW Solar Cost | 40% PM Surya Ghar Rebate | ₹102.80/L Petrol | 14.5 km/L ICE
+- **Bhubaneswar, OD (India):** 5.0 Peak Sun Hours | ₹6.80/kWh Grid Tariff | ₹48,000/kW Solar Cost | 40% PM Surya Ghar Rebate | ₹103.20/L Petrol | 14.5 km/L ICE
+- **London, UK (UK):** 3.1 Peak Sun Hours | £0.28/kWh Grid Tariff | £1,650/kW Solar Cost | 0% VAT (20% Effective) | £1.45/L Petrol | 7.5 L/100km ICE
+- **Berlin, BE (Germany):** 3.3 Peak Sun Hours | €0.38/kWh Grid Tariff | €1,450/kW Solar Cost | 0% VAT Rebate | €1.78/L Petrol | 7.2 L/100km ICE
+- **Toronto, ON (Canada):** 3.8 Peak Sun Hours | C$0.15/kWh Grid Tariff | C$2.60/W Solar Cost | 18% Greener Homes Rebate | C$1.65/L Petrol | 8.8 L/100km ICE
+- **Tokyo, TY (Japan):** 3.6 Peak Sun Hours | ¥31.0/kWh Grid Tariff | ¥280,000/kW Solar Cost | 15% Municipal Subsidy | ¥175.0/L Petrol | 15.0 km/L ICE
+
+## Supported Electric Vehicles
+
+- **Tesla Model Y:** 75 kWh Battery | 155 Wh/km (250 Wh/mi)
+- **Hyundai Ioniq 5:** 77.4 kWh Battery | 168 Wh/km (270 Wh/mi)
+- **BYD Atto 3:** 60.5 kWh Battery | 160 Wh/km (257 Wh/mi)
+- **Tata Nexon.ev:** 40.5 kWh Battery | 125 Wh/km (201 Wh/mi)
+- **Tata Tigor EV:** 26 kWh Battery | 120 Wh/km (193 Wh/mi)
+- **MG ZS EV:** 50.3 kWh Battery | 165 Wh/km (265 Wh/mi)
+- **Rivian R1S:** 135 kWh Battery | 280 Wh/km (450 Wh/mi)
+- **Kia EV6:** 77.4 kWh Battery | 165 Wh/km (265 Wh/mi)
+
+## Machine-Readable Formats
+
+- **Markdown alternate:** Request with HTTP Header `Accept: text/markdown` or query `?format=markdown`.
+- **JSON API / MCP:** Inspect `/.well-known/mcp/server-card.json`.

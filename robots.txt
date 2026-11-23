@@ -6,5 +6,8 @@
 User-agent: *
 Allow: /
 
+# Content Signals Directive (SEP / AI Crawl Policy)
+Content-Signal: search=yes, ai-train=no
+
 # Sitemap Declaration
 Sitemap: https://calc.intelligentwebdevelopers.com/sitemap.xml

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card/v1.json",
+  "name": "solar-ev-payback-calculator",
+  "version": "1.0.0",
+  "description": "Zero-dependency programmatic SEO and real-time calculation engine for Solar & EV Charging Payback and ROI modeling.",
+  "homepage": "https://calc.intelligentwebdevelopers.com",
+  "endpoint": "https://calc.intelligentwebdevelopers.com/api/mcp",
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "prompts": {
+      "listChanged": false
+    },
+    "resources": {
+      "subscribe": false,
+      "listChanged": false
+    }
+  },
+  "tools": [
+    {
+      "name": "calculate_solar_ev_payback",
+      "description": "Calculate residential solar PV generation, net system investment after rebates, annual EV home charging cost vs petrol, annual savings, and simple payback period in years.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city_slug": {
+            "type": "string",
+            "description": "City identifier, e.g. 'austin-tx', 'phoenix-az', 'sydney-nsw', 'melbourne-vic', 'bengaluru-ka', 'bhubaneswar-od', 'london-uk', 'berlin-be', 'toronto-on', 'tokyo-ty'."
+          },
+          "ev_slug": {
+            "type": "string",
+            "description": "EV model identifier, e.g. 'tesla-model-y', 'hyundai-ioniq-5', 'byd-atto-3', 'tata-nexon-ev', 'tata-tigor-ev', 'mg-zs-ev', 'rivian-r1s', 'kia-ev6'."
+          },
+          "system_kw": {
+            "type": "number",
+            "description": "Rooftop solar system size in kW (e.g. 5.0, 8.0). If omitted, city default is used."
+          },
+          "daily_commute_km": {
+            "type": "number",
+            "description": "Average daily driving distance in km (or converted from miles). Defaults to 35 km."
+          },
+          "solar_charge_pct": {
+            "type": "number",
+            "description": "Percentage of EV charging powered directly by rooftop solar (0-100). Defaults to 70%."
+          }
+        },
+        "required": ["city_slug", "ev_slug"]
+      }
+    }
+  ],
+  "contact": {
+    "organization": "Intelligent Web Developers",
+    "url": "https://staging.intelligentwebdevelopers.com",
+    "email": "contact@intelligentwebdevelopers.com",
+    "support": "https://staging.intelligentwebdevelopers.com/contact/"
+  }
+}

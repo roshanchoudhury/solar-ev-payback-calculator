@@ -331,6 +331,69 @@
     calculate();
   }
 
+  // WebMCP in-browser tool registration (Goal 11)
+  function registerWebMcpTool() {
+    const toolDef = {
+      name: 'calculate_solar_ev_payback',
+      description: 'Calculate solar and EV charging payback period, annual savings, and net ROI based on city tariffs and EV model specifications',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          system_kw: { type: 'number', description: 'Rooftop solar capacity in kW' },
+          daily_distance: { type: 'number', description: 'Daily driving distance (' + (city.distance_unit || 'km') + '/day)' },
+          solar_charge_share_pct: { type: 'number', description: 'Percentage of EV charging from solar (0-100)' },
+          solar_cost_per_kw: { type: 'number', description: 'Gross cost per kW installed' },
+          rebate_pct: { type: 'number', description: 'Government rebate percentage (0-100)' },
+          electricity_rate: { type: 'number', description: 'Grid electricity tariff per kWh' },
+          petrol_price: { type: 'number', description: 'Petrol or fuel price per ' + (city.fuel_unit || 'liter') }
+        }
+      },
+      execute: async function (params) {
+        params = params || {};
+        if (params.system_kw != null && el.systemKwInput) {
+          el.systemKwInput.value = params.system_kw;
+          if (el.systemKwSlider) el.systemKwSlider.value = params.system_kw;
+        }
+        if (params.daily_distance != null && el.dailyDistInput) {
+          el.dailyDistInput.value = params.daily_distance;
+          if (el.dailyDistSlider) el.dailyDistSlider.value = params.daily_distance;
+        }
+        if (params.solar_charge_share_pct != null && el.solarChargePctInput) {
+          el.solarChargePctInput.value = params.solar_charge_share_pct;
+          if (el.solarChargePctSlider) el.solarChargePctSlider.value = params.solar_charge_share_pct;
+        }
+        if (params.solar_cost_per_kw != null && el.solarCostInput) el.solarCostInput.value = params.solar_cost_per_kw;
+        if (params.rebate_pct != null && el.rebatePctInput) el.rebatePctInput.value = params.rebate_pct;
+        if (params.electricity_rate != null && el.elecRateInput) el.elecRateInput.value = params.electricity_rate;
+        if (params.petrol_price != null && el.petrolPriceInput) el.petrolPriceInput.value = params.petrol_price;
+
+        const res = calculate();
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(res, null, 2)
+            }
+          ]
+        };
+      }
+    };
+
+    // Register with navigator.modelContext if available (W3C WebMCP draft specification)
+    if (typeof navigator !== 'undefined' && navigator.modelContext && typeof navigator.modelContext.registerTool === 'function') {
+      try {
+        navigator.modelContext.registerTool(toolDef);
+      } catch (err) {
+        console.warn('WebMCP tool registration notice:', err);
+      }
+    }
+
+    // Expose on window for in-browser agents and extensions
+    window.solarEvTools = window.solarEvTools || {};
+    window.solarEvTools.calculate_solar_ev_payback = toolDef;
+    window.calculateSolarEvPayback = calculate;
+  }
+
   // Initialize
   function init() {
     // Bind interactive sliders and inputs
@@ -357,6 +420,9 @@
     if (el.btnResetDefaults) {
       el.btnResetDefaults.addEventListener('click', resetDefaults);
     }
+
+    // Register WebMCP Tools
+    registerWebMcpTool();
 
     // Initial calculation run
     calculate();

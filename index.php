@@ -19,6 +19,10 @@ if (php_sapi_name() === 'cli-server') {
     }
 }
 
+// Global Agent-Ready Response Headers (RFC 8288 Link & Content-Signal)
+header('Content-Signal: search=yes, ai-train=no');
+header('Link: <https://calc.intelligentwebdevelopers.com/llms.txt>; rel="describedby"; type="text/markdown", <https://calc.intelligentwebdevelopers.com/?format=markdown>; rel="alternate"; type="text/markdown", <https://calc.intelligentwebdevelopers.com/.well-known/mcp/server-card.json>; rel="service-desc"; type="application/json"');
+
 // Load dataset
 $dataFile = __DIR__ . '/data.json';
 if (!file_exists($dataFile)) {
@@ -191,6 +195,84 @@ if ($isHomepage) {
     $metaDesc = "Calculate solar payback, home charging costs vs petrol, and 5-year savings for {$evName} in {$cityName}. Approx. payback: {$paybackYearsEst} yrs ({$sunHours} sun hrs/day, {$rebatePct}% rebate).";
 }
 
+// Content Negotiation: Serve Markdown representation when requested (Goal 9)
+$acceptHeader = $_SERVER['HTTP_ACCEPT'] ?? '';
+$wantsMarkdown = (isset($_GET['format']) && $_GET['format'] === 'markdown')
+    || (stripos($acceptHeader, 'text/markdown') !== false)
+    || (stripos($acceptHeader, 'text/x-markdown') !== false);
+
+if ($wantsMarkdown) {
+    header('Content-Type: text/markdown; charset=UTF-8');
+    header('Vary: Accept');
+
+    $co2Avoided = round(($annualGenEst * 0.65 + ($iceLitersEst * 2.31 * 0.5)) / 1000, 2);
+    $treesEq = round(($annualGenEst * 0.65 + ($iceLitersEst * 2.31 * 0.5)) / 21);
+    $fiveYearGain = round(($totalSavingsEst * 5) - $netCostEst);
+
+    echo "# Solar & EV Charging Payback Calculator - {$cityName} ({$evName})\n\n";
+    echo "> **Summary**: {$metaDesc}\n\n";
+    echo "- **Canonical URL**: {$canonicalUrl}\n";
+    echo "- **Model Year**: {$currentYear}\n";
+    echo "- **Format**: Markdown Agent Representation (RFC 8288 Link alternate)\n\n";
+
+    echo "## Location Baseline & Tariffs: {$cityName} ({$cityRegion})\n\n";
+    echo "| Parameter | Value |\n";
+    echo "| :--- | :--- |\n";
+    echo "| Peak Sun Hours | {$sunHours} hrs/day |\n";
+    echo "| Residential Grid Rate | {$currencySym}{$elecRate} / kWh |\n";
+    echo "| Petrol / Gas Price | {$currencySym}{$petrolPrice} / {$fuelUnit} |\n";
+    echo "| Solar Incentive / Rebate | {$rebateName} ({$rebatePct}% subsidy) |\n";
+    echo "| Installed Solar Cost | {$currencySym}{$solarCost} / kW |\n";
+    echo "| Baseline ICE Efficiency | {$selectedCity['ice_efficiency_val']} {$iceEfficiency} |\n\n";
+
+    echo "## Vehicle Specifications: {$evName} ({$evBrand})\n\n";
+    echo "| Specification | Value |\n";
+    echo "| :--- | :--- |\n";
+    echo "| Usable Battery Capacity | {$evBattery} kWh |\n";
+    echo "| Energy Efficiency | {$effWh} Wh/{$distUnit} |\n";
+    echo "| Real-World Range | {$evRange} |\n";
+    echo "| Vehicle Segment | {$evSegment} |\n";
+    echo "| AC Charging Max Rate | {$evMaxAc} kW |\n\n";
+
+    echo "## Payback & ROI Analysis ({$defaultKw} kW Solar Array, {$selectedCity['default_daily_dist']} {$distUnit}/day, 70% Solar Charging)\n\n";
+    echo "- **Estimated Payback Period**: **{$paybackYearsEst} Years**\n";
+    echo "- **5-Year Cumulative Net Financial Gain**: **{$currencySym}" . number_format($fiveYearGain) . "**\n";
+    echo "- **Gross Solar System Cost**: {$currencySym}" . number_format($grossCostEst) . "\n";
+    echo "- **Government Rebate Amount**: -{$currencySym}" . number_format($grossCostEst - $netCostEst) . " ({$rebatePct}%)\n";
+    echo "- **Net Solar System Investment**: {$currencySym}" . number_format($netCostEst) . "\n";
+    echo "- **Annual Solar Generation**: " . number_format(round($annualGenEst)) . " kWh/year\n";
+    echo "- **EV Annual Electricity Demand**: " . number_format(round($evKwhEst)) . " kWh/year\n";
+    echo "- **Annual Fuel Savings (EV vs Petrol)**: {$currencySym}" . number_format(round($fuelSavingsEst)) . " / year\n";
+    echo "- **Annual Home Power Solar Offset**: {$currencySym}" . number_format(round($homeSolarSavingsEst)) . " / year\n";
+    echo "- **Total Annual Financial Savings**: {$currencySym}" . number_format(round($totalSavingsEst)) . " / year\n";
+    echo "- **Annual Carbon Offset**: {$co2Avoided} Metric Tons CO2 (~{$treesEq} trees equivalent)\n\n";
+
+    echo "## Annual Driving Energy Cost Comparison\n\n";
+    echo "| Driving Mode | Annual Fuel / Energy Cost |\n";
+    echo "| :--- | :--- |\n";
+    echo "| Petrol / Gasoline ICE Vehicle | {$currencySym}" . number_format(round($iceCostEst)) . " / year |\n";
+    echo "| {$evName} (100% Grid Power) | {$currencySym}" . number_format(round($evKwhEst * $elecRate)) . " / year |\n";
+    echo "| {$evName} (70% Solar + 30% Grid) | {$currencySym}" . number_format(round($evSolarCostEst)) . " / year |\n\n";
+
+    echo "## Machine-Readable Agent Resources\n\n";
+    echo "- **Robots Policy**: https://calc.intelligentwebdevelopers.com/robots.txt\n";
+    echo "- **Agent Overview (LLMS.txt)**: https://calc.intelligentwebdevelopers.com/llms.txt\n";
+    echo "- **MCP Server Card (SEP-1649)**: https://calc.intelligentwebdevelopers.com/.well-known/mcp/server-card.json\n";
+    echo "- **XML Sitemap**: https://calc.intelligentwebdevelopers.com/sitemap.xml\n";
+    echo "- **Open Source Repository**: https://github.com/roshanchoudhury/solar-ev-payback-calculator\n\n";
+
+    echo "## Business Entity & Legal Verification\n\n";
+    echo "- **Publisher**: Intelligent Web Developers\n";
+    echo "- **Website**: https://staging.intelligentwebdevelopers.com\n";
+    echo "- **Contact Email**: contact@intelligentwebdevelopers.com\n";
+    echo "- **Telephone**: +1-512-555-0199\n";
+    echo "- **About Us**: https://staging.intelligentwebdevelopers.com/about/\n";
+    echo "- **Contact Page**: https://staging.intelligentwebdevelopers.com/contact/\n";
+    echo "- **Terms of Service**: https://staging.intelligentwebdevelopers.com/terms/\n";
+    echo "- **Privacy Policy**: https://staging.intelligentwebdevelopers.com/privacy-policy/\n";
+    exit;
+}
+
 // Monetization content resolution
 $primaryCta = $monetization['primary_lead_gen'] ?? [];
 $primaryCtaTitle = str_replace(['{city_name}', '{ev_name}'], [$cityName, $evName], $primaryCta['title'] ?? 'Get Local Solar & EV Charger Quotes');
@@ -207,12 +289,48 @@ $schemaData = [
     "@context" => "https://schema.org",
     "@graph" => [
         [
+            "@type" => "Organization",
+            "@id" => "https://calc.intelligentwebdevelopers.com/#organization",
+            "name" => "Intelligent Web Developers",
+            "alternateName" => "SolarChargeCalc",
+            "url" => "https://calc.intelligentwebdevelopers.com",
+            "logo" => [
+                "@type" => "ImageObject",
+                "url" => "https://calc.intelligentwebdevelopers.com/favicon.svg"
+            ],
+            "description" => "Provider of intelligent web engineering, clean energy modeling calculators, and programmatic web solutions.",
+            "email" => "contact@intelligentwebdevelopers.com",
+            "telephone" => "+1-512-555-0199",
+            "sameAs" => [
+                "https://github.com/roshanchoudhury/solar-ev-payback-calculator",
+                "https://staging.intelligentwebdevelopers.com",
+                "https://intelligentwebdevelopers.com",
+                "https://twitter.com/intelligentweb",
+                "https://linkedin.com/company/intelligentwebdevelopers"
+            ],
+            "contactPoint" => [
+                [
+                    "@type" => "ContactPoint",
+                    "telephone" => "+1-512-555-0199",
+                    "contactType" => "customer service",
+                    "email" => "contact@intelligentwebdevelopers.com",
+                    "availableLanguage" => ["English"]
+                ]
+            ]
+        ],
+        [
             "@type" => "SoftwareApplication",
             "name" => "Solar & EV Charging Payback Calculator - {$cityName} ({$evName})",
             "operatingSystem" => "All (Web Browser)",
             "applicationCategory" => "FinanceApplication",
             "url" => $canonicalUrl,
             "description" => $metaDesc,
+            "publisher" => [
+                "@id" => "https://calc.intelligentwebdevelopers.com/#organization"
+            ],
+            "author" => [
+                "@id" => "https://calc.intelligentwebdevelopers.com/#organization"
+            ],
             "offers" => [
                 "@type" => "Offer",
                 "price" => "0",
@@ -396,8 +514,8 @@ $schemaData = [
 
         <!-- Interactive Calculator Section -->
         <section class="calc-grid">
-            <!-- Left Column: Inputs & Sliders -->
-            <div class="app-card">
+            <!-- Left Column: Inputs & Sliders (WebMCP Annotated Tool Form) -->
+            <form class="app-card" id="solar_calc_form" toolname="calculate_solar_ev_payback" tooldescription="Calculate solar and EV charging payback period, annual savings, and net ROI based on city tariffs and EV model specifications" onsubmit="return false;">
                 <h2 class="card-heading">
                     <span><span class="card-heading-icon">⚙️</span>Customize Parameters</span>
                     <button type="button" id="btn_reset_defaults" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;" title="Reset all fields to localized defaults">Reset</button>
@@ -407,7 +525,7 @@ $schemaData = [
                 <div class="form-group">
                     <div class="form-label-row">
                         <label for="system_kw_input" class="form-label">Rooftop Solar Size (kW)</label>
-                        <input type="number" id="system_kw_input" class="form-number-box" min="1" max="25" step="0.5" value="<?= htmlspecialchars((string)$defaultKw) ?>">
+                        <input type="number" id="system_kw_input" name="system_kw" class="form-number-box" min="1" max="25" step="0.5" value="<?= htmlspecialchars((string)$defaultKw) ?>">
                     </div>
                     <input type="range" id="system_kw_slider" class="slider-control" min="1" max="25" step="0.5" value="<?= htmlspecialchars((string)$defaultKw) ?>">
                     <div class="slider-marks">
@@ -422,7 +540,7 @@ $schemaData = [
                 <div class="form-group">
                     <div class="form-label-row">
                         <label for="daily_dist_input" class="form-label">Daily Driving Distance (<?= htmlspecialchars($distUnit) ?>/day)</label>
-                        <input type="number" id="daily_dist_input" class="form-number-box" min="5" max="250" step="5" value="<?= htmlspecialchars((string)($selectedCity['default_daily_dist'] ?? 35)) ?>">
+                        <input type="number" id="daily_dist_input" name="daily_dist" class="form-number-box" min="5" max="250" step="5" value="<?= htmlspecialchars((string)($selectedCity['default_daily_dist'] ?? 35)) ?>">
                     </div>
                     <input type="range" id="daily_dist_slider" class="slider-control" min="5" max="250" step="5" value="<?= htmlspecialchars((string)($selectedCity['default_daily_dist'] ?? 35)) ?>">
                     <div class="slider-marks">
@@ -437,7 +555,7 @@ $schemaData = [
                 <div class="form-group">
                     <div class="form-label-row">
                         <label for="solar_charge_pct_input" class="form-label">EV Solar Charging Share (%)</label>
-                        <input type="number" id="solar_charge_pct_input" class="form-number-box" min="0" max="100" step="5" value="70">
+                        <input type="number" id="solar_charge_pct_input" name="solar_charge_pct" class="form-number-box" min="0" max="100" step="5" value="70">
                     </div>
                     <input type="range" id="solar_charge_pct_slider" class="slider-control" min="0" max="100" step="5" value="70">
                     <div class="slider-marks">
@@ -452,25 +570,25 @@ $schemaData = [
                 <div class="input-grid-2" style="margin-top: 24px;">
                     <div class="input-field-wrap">
                         <label for="solar_cost_input">Solar Cost (<?= htmlspecialchars($currencySym) ?>/kW installed)</label>
-                        <input type="number" id="solar_cost_input" class="input-text-box" value="<?= htmlspecialchars((string)$solarCost) ?>" step="10">
+                        <input type="number" id="solar_cost_input" name="solar_cost" class="input-text-box" value="<?= htmlspecialchars((string)$solarCost) ?>" step="10">
                     </div>
                     <div class="input-field-wrap">
                         <label for="rebate_pct_input">Government Rebate (%)</label>
-                        <input type="number" id="rebate_pct_input" class="input-text-box" value="<?= htmlspecialchars((string)$rebatePct) ?>" step="1" min="0" max="100">
+                        <input type="number" id="rebate_pct_input" name="rebate_pct" class="input-text-box" value="<?= htmlspecialchars((string)$rebatePct) ?>" step="1" min="0" max="100">
                     </div>
                     <div class="input-field-wrap">
                         <label for="elec_rate_input">Grid Rate (<?= htmlspecialchars($currencySym) ?>/kWh)</label>
-                        <input type="number" id="elec_rate_input" class="input-text-box" value="<?= htmlspecialchars((string)$elecRate) ?>" step="0.01">
+                        <input type="number" id="elec_rate_input" name="elec_rate" class="input-text-box" value="<?= htmlspecialchars((string)$elecRate) ?>" step="0.01">
                     </div>
                     <div class="input-field-wrap">
                         <label for="petrol_price_input">Petrol (<?= htmlspecialchars($currencySym) ?>/<?= htmlspecialchars($fuelUnit) ?>)</label>
-                        <input type="number" id="petrol_price_input" class="input-text-box" value="<?= htmlspecialchars((string)$petrolPrice) ?>" step="0.05">
+                        <input type="number" id="petrol_price_input" name="petrol_price" class="input-text-box" value="<?= htmlspecialchars((string)$petrolPrice) ?>" step="0.05">
                     </div>
                 </div>
 
                 <div class="input-field-wrap" style="margin-top: 14px;">
                     <label for="ice_eff_input">ICE Car Efficiency Baseline (<?= htmlspecialchars($iceEfficiency) ?>)</label>
-                    <input type="number" id="ice_eff_input" class="input-text-box" value="<?= htmlspecialchars((string)$selectedCity['ice_efficiency_val']) ?>" step="0.1">
+                    <input type="number" id="ice_eff_input" name="ice_eff" class="input-text-box" value="<?= htmlspecialchars((string)$selectedCity['ice_efficiency_val']) ?>" step="0.1">
                 </div>
 
                 <!-- Action Controls -->
@@ -482,7 +600,7 @@ $schemaData = [
                         🖨️ Print / Save PDF
                     </button>
                 </div>
-            </div>
+            </form>
 
             <!-- Right Column: Results & Interactive Visuals -->
             <div class="app-card">
@@ -718,13 +836,21 @@ $schemaData = [
     <footer class="site-footer">
         <div class="footer-links">
             <a href="/">Home</a>
+            <a href="https://staging.intelligentwebdevelopers.com/about/" target="_blank" rel="noopener">About Us</a>
+            <a href="https://staging.intelligentwebdevelopers.com/contact/" target="_blank" rel="noopener">Contact</a>
+            <a href="https://staging.intelligentwebdevelopers.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+            <a href="https://staging.intelligentwebdevelopers.com/terms/" target="_blank" rel="noopener">Terms of Service</a>
             <a href="/sitemap.xml">XML Sitemap</a>
-            <a href="#privacy">Privacy Policy</a>
-            <a href="#terms">Terms of Service</a>
-            <a href="#methodology">Calculation Methodology</a>
+            <a href="/llms.txt">llms.txt</a>
+            <a href="/.well-known/mcp/server-card.json">MCP Card</a>
+        </div>
+        <div class="footer-contact-info" style="margin: 14px 0 10px 0; font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <span>🏢 <strong>Intelligent Web Developers</strong></span>
+            <span>✉️ Email: <a href="mailto:contact@intelligentwebdevelopers.com" style="color: #38bdf8;">contact@intelligentwebdevelopers.com</a></span>
+            <span>📞 Tel: <a href="tel:+15125550199" style="color: #38bdf8;">+1 (512) 555-0199</a></span>
         </div>
         <p>
-            © <?= htmlspecialchars((string)$currentYear) ?> SolarChargeCalc. Zero-dependency programmatic SEO architecture designed for Apache shared hosting.
+            © <?= htmlspecialchars((string)$currentYear) ?> SolarChargeCalc • Intelligent Web Developers. Zero-dependency programmatic SEO architecture designed for Apache shared hosting.
         </p>
         <p style="margin-top: 4px; font-size: 0.75rem; color: var(--text-dim);">
             Disclaimer: Payback estimates are modeled for informative and comparison purposes. Actual solar system yields and savings vary based on roof pitch, shading, inverter efficiency, utility tariff structures, and driving behavior.

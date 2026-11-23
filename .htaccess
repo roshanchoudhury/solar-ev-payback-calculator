@@ -34,13 +34,15 @@ AddDefaultCharset UTF-8
 </IfModule>
 
 # ==============================================================================
-# Security Headers
+# Security & Agent-Ready Headers (RFC 8288 & Content Signals)
 # ==============================================================================
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set Content-Signal "search=yes, ai-train=no"
+    Header always set Link '<https://calc.intelligentwebdevelopers.com/llms.txt>; rel="describedby"; type="text/markdown", <https://calc.intelligentwebdevelopers.com/?format=markdown>; rel="alternate"; type="text/markdown", <https://calc.intelligentwebdevelopers.com/.well-known/mcp/server-card.json>; rel="service-desc"; type="application/json"'
 </IfModule>
 
 # ==============================================================================
