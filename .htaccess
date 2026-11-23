@@ -21,13 +21,13 @@ AddDefaultCharset UTF-8
     RewriteCond %{HTTP:X-Forwarded-Proto} !https
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # 2. Clean routing for XML Sitemap
-    RewriteRule ^sitemap\.xml$ sitemap.php [L]
-
-    # 3. Allow direct access to real existing files and directories
+    # 2. Allow direct access to real existing files and directories (Static sitemap.xml, assets)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
+
+    # 3. Fallback routing for XML Sitemap if not present on disk
+    RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
     # 4. Route all dynamic clean URLs (/{city}/{ev} and /) to index.php front controller
     RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
@@ -43,6 +43,12 @@ AddDefaultCharset UTF-8
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
     Header always set Content-Signal "search=yes, ai-train=no"
     Header always set Link '<https://calc.intelligentwebdevelopers.com/llms.txt>; rel="describedby"; type="text/markdown", <https://calc.intelligentwebdevelopers.com/?format=markdown>; rel="alternate"; type="text/markdown", <https://calc.intelligentwebdevelopers.com/.well-known/mcp/server-card.json>; rel="service-desc"; type="application/json"'
+
+    # Keep sitemap.xml strictly clean for Google Search Console & search engine bots
+    <Files "sitemap.xml">
+        Header unset Link
+        Header unset X-Frame-Options
+    </Files>
 </IfModule>
 
 # ==============================================================================

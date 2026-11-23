@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "SolarChargeCalc",
-    "base_url": "https://solarchargecalc.com",
+    "base_url": "https://calc.intelligentwebdevelopers.com",
     "tagline": "Solar & EV Charging Payback Calculator",
     "meta_author": "CleanEnergy Analytics",
     "default_city": "bhubaneswar-od",
