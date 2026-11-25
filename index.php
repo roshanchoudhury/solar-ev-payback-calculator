@@ -89,6 +89,13 @@ if ($is404) {
     <!DOCTYPE html>
     <html lang="en">
     <head>
+        <!-- Google Tag (gtm.js) -->
+        <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TWBDV72P"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        </script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?= htmlspecialchars($pageTitle) ?></title>
@@ -422,6 +429,13 @@ $schemaData = [
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag (gtm.js) -->
+    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TWBDV72P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($metaTitle) ?></title>
